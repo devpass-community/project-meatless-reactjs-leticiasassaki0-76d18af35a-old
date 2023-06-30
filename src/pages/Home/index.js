@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import * as S from './styles';
 import Header from '../../components/Header';
 
@@ -9,10 +8,11 @@ const Home = () => {
   useEffect(() => {
     const fetchRestaurantData = async () => {
       try {
-        const response = await axios.get(
+        const response = await fetch(
           'https://raw.githubusercontent.com/evercodeinc/meatless-api/main/restaurant_list.json'
         );
-        setRestaurantData(response.data);
+        const data = await response.json();
+        setRestaurantData(data);
       } catch (error) {
         console.error('Error fetching restaurant data:', error);
       }
@@ -26,13 +26,13 @@ const Home = () => {
       <Header address="R. Clodomiro Amazonas, 22" />
       <S.Main>
         <h2>Restaurantes (todos)</h2>
-        <ul data-testid="meatless-restaurantList">
+        <div data-testid="meatless-restaurantList">
           {restaurantData.map((restaurant) => (
-            <li key={restaurant.id} data-testid="meatless-restaurantCard">
+            <div key={restaurant.id} data-testid="meatless-restaurantCard">
               {restaurant.name}
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </S.Main>
     </S.Container>
   );
